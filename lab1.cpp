@@ -1,61 +1,48 @@
-#include<iostream>
-#include<stdio.h>
-#include<fstream>
-#include<vector>
-using namespace std;
+#include <stdio.h>
 
+void main()
+{   int tc,i,j,N,f,l,ele,mid,arr[10],flag=0;
+	
+	scanf("%d",&tc);
+	printf("\n");
+	for(j=0;j<tc;j++)
+	{
 
-int binarys(vector<int> a,int low,int high,int ele)
-{
-int mid;
-while(low<=high)
-{
-mid=(low+high)/2;
-if(a[mid]==ele)
-{
-return ele;
-
-}
-else if(a[mid]>ele)
-{
-high=mid-1;
-}
-else
-{
-low=mid+1;
-}
-}
-return -1;
-}
-
-
-int main()
-{
-int n,x,ele,pos,t;
-freopen("lab0.txt","r",stdin);
-vector<int> arr;
-cin>>t;      
-
-while(t--)
-{
-pos=-1;
-cout<<"\n\nEnter the number of elements in the array\n";
-cin>>n;
-cout<<"\n\nEnter the element to be searched\n";
-cin>>ele;
-for(int i=0;i<n;i++)
-{
-cout<<"\nEnter element to be inserted\n";
-cin>>x;
-arr.push_back(x);
-}
-pos=binarys(arr,0,n-1,ele);
-if(pos>-1)
-cout<<"\n\n1\n\n";
-
-else
-cout<<"\n\n-1\n\n";
-
-}
-return 0;
+	scanf("%d%d",&N,&ele);
+	   for(i=0;i<N;i++)
+   {
+	   scanf("%d",&arr[i]);
+   }
+   
+	f=0;l=N;
+    
+	while(f<=l)
+	{ 	mid=(f+l)/2;
+	  if(ele==arr[mid])
+	  {  
+		flag=1;
+		break;
+	  }
+	  else if(ele>arr[mid])
+	  {
+		  f=mid+1;
+	  }	
+	  else
+	  {
+		  l=mid-1;
+	  }
+	  
+	}
+	
+	if(flag==1)
+	{
+		printf("1\n");
+	}
+         else
+	        printf("-1\n");
+		
+        flag=0;		
+	
+	
+ }
 }
