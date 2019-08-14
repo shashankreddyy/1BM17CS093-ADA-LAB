@@ -13,7 +13,8 @@ while(low<=high)
 mid=(low+high)/2;
 if(a[mid]==ele)
 {
-return ele;										//Binary search
+return ele;
+
 }
 else if(a[mid]>ele)
 {
@@ -26,7 +27,6 @@ low=mid+1;
 }
 return -1;
 }
-//-----------------------------------------------------------------MAIN FUNCTION()--------------------------------------------------------------------------
 
 
 int main()
@@ -34,18 +34,18 @@ int main()
 int n,x,ele,pos,t;
 freopen("lab0.txt","r",stdin);
 vector<int> arr;
-cin>>t;      //testcases
+cin>>t;      
 
 while(t--)
 {
 pos=-1;
-//cout<<"\n\nEnter the number of elements in the array\n";
+cout<<"\n\nEnter the number of elements in the array\n";
 cin>>n;
-//cout<<"\n\nEnter the element to be searched\n";
+cout<<"\n\nEnter the element to be searched\n";
 cin>>ele;
 for(int i=0;i<n;i++)
 {
-//cout<<"\nEnter element to be inserted\n";
+cout<<"\nEnter element to be inserted\n";
 cin>>x;
 arr.push_back(x);
 }
