@@ -3,7 +3,7 @@ using namespace std;
 
 void smallestElements(int A[], int n, int k){
 	int i,j,temp, min;
-	for(i=0;i<k;i++){ // using Selection Sort
+	for(i=0;i<k;i++){ 
 		min=i;
 		for(j=i+1;j<n;j++){
 			if(A[j]<A[min]) min = j;
