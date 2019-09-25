@@ -1,127 +1,74 @@
-#include <bits/stdc++.h> 
-#include<iostream>
-using namespace std; 
+#include <iostream>
+#include <cmath>
+#define UNASSIGNED 0
+using namespace std;
 
-#define UNASSIGNED 0 
+bool FindUnassignedLocation(int **grid, int &row, int &col, int N){
+	for(row = 0; row<N; row++)
+		for(col = 0; col<N; col++)
+			if(grid[row][col] == UNASSIGNED)
+				return true;
+	return false;
+}
 
+bool UsedInRow(int **grid, int row, int num, int N){
+	for(int i=0; i<N; i++)
+		if(grid[row][i] == num)
+			return true;
+	return false;
+}
 
-#define N 9
+bool UsedInCol(int **grid, int col, int num, int N){
+	for(int i =0; i<N; i++)
+		if(grid[i][col] == num)
+			return true;
+	return false;
+}
 
+bool UsedInBox(int **grid, int boxStartRow, int boxStartCol, int num, int N, int SQN){
+	for(int i=0; i<SQN; i++)
+		for(int j=0; j<SQN;j++)
+			if(grid[i+boxStartRow][j+boxStartCol] == num)
+				return true;
+	return false;
+}
 
-bool FindUnassignedLocation(int grid[N][N], int &row, int &col); 
- 
-bool isSafe(int grid[N][N], int row, int col, int num); 
+bool isSafe(int **grid, int row, int col, int num, int N){
+	return !UsedInRow(grid, row, num, N) && !UsedInCol(grid,col,num, N) && !UsedInBox(grid,row-row%(int(sqrt(N))), col-col%(int(sqrt(N))),num, N, int(sqrt(N)));
+}
 
-bool SolveSudoku(int grid[N][N]) 
-{ 
-	int row, col; 
-
-	if (!FindUnassignedLocation(grid, row, col)) 
-	return true; 
-
-	
-	for (int num = 1; num <= 9; num++) 
-	{ 
-		
-		if (isSafe(grid, row, col, num)) 
-		{ 
-			
-			grid[row][col] = num; 
-
-			if (SolveSudoku(grid)) 
-				return true; 
-			grid[row][col] = UNASSIGNED; 
-		} 
-	} 
-	return false; 
-} 
-
-
-bool FindUnassignedLocation(int grid[N][N], 
-							int &row, int &col) 
-{ 
-	for (row = 0; row < N; row++) 
-		for (col = 0; col < N; col++) 
-			if (grid[row][col] == UNASSIGNED) 
-				return true; 
-	return false; 
-} 
-
-
-bool UsedInRow(int grid[N][N], int row, int num) 
-{ 
-	for (int col = 0; col < N; col++) 
-		if (grid[row][col] == num) 
-			return true; 
-	return false; 
-} 
-
-
-bool UsedInCol(int grid[N][N], int col, int num) 
-{ 
-	for (int row = 0; row < N; row++) 
-		if (grid[row][col] == num) 
-			return true; 
-	return false; 
-} 
-
-
-bool UsedInBox(int grid[N][N], int boxStartRow, 
-			int boxStartCol, int num) 
-{ 
-	for (int row = 0; row < 3; row++) 
-		for (int col = 0; col < 3; col++) 
-			if (grid[row + boxStartRow] 
-					[col + boxStartCol] == num) 
-				return true; 
-	return false; 
-} 
-
-
-bool isSafe(int grid[N][N], int row, 
-				int col, int num) 
-{ 
-	
-	return !UsedInRow(grid, row, num) && 
-		!UsedInCol(grid, col, num) && 
-		!UsedInBox(grid, row - row % 3 , 
-					col - col % 3, num) && 
-			grid[row][col] == UNASSIGNED; 
-} 
-
-
-void printGrid(int grid[N][N]) 
-{ 
-	for (int row = 0; row < N; row++) 
-	{ 
-	for (int col = 0; col < N; col++) 
-			cout << grid[row][col] << " "; 
-		cout << endl; 
-	} 
-} 
-
-int main() 
-{ 
-	int i,j,grid[N][N];
-	
-	/*int grid[N][N]={{3,0,6,5,0,8,4,0,0},
-			{5,2,0,0,0,0,0,0,0},
-			{0,8,7,0,0,0,0,3,1},
-			{0,0,3,0,1,0,0,8,0},
-			{9,0,0,8,6,3,0,0,5},
-			{0,5,0,0,9,0,6,0,0},
-			{1,3,0,0,0,0,2,5,0}};	*/
-	for(i=0;i<N;i++){
-		for(j=0;j<N;j++){
-			cin>>grid[i][j];
+bool solveSudoku(int **grid, int N){
+	int row, col;
+	if(!FindUnassignedLocation(grid,row, col,N))
+		return true;
+	for(int num = 1; num<=N; num++){
+		if(isSafe(grid,row,col,num,N)){
+			grid[row][col]=num;
+			if(solveSudoku(grid,N))
+				return true;
+			grid[row][col] = UNASSIGNED;
 		}
-	}		
-	if(SolveSudoku(grid) == true)
+	}
+	return false;
+}
 
-		printGrid(grid); 
-	else
-		cout << "No solution exists"; 
-
-	return 0; 
-} 
-
+int main(){
+	int **grid, N;
+	cout<<"Enter size :";
+	cin>>N;
+	grid = new int*[N];
+	for(int i =0;i<N;i++)
+		grid[i] = new int[N];
+	cout<<"Enter the Sudoku puzzle(0 for unfilled) :\n";
+	for(int i =0; i<N; i++)
+		for(int j=0;j<N;j++)
+			cin>>grid[i][j];
+	if(solveSudoku(grid,N)){
+		for(int i =0; i<N;i++){
+			for(int j=0;j<N;j++)
+				cout<<grid[i][j]<<"\t";
+			cout<<"\n";
+		}
+	}
+	return 0;
+}
