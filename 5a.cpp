@@ -1,74 +1,102 @@
-#include <iostream>
-#include <cmath>
-#define UNASSIGNED 0
-using namespace std;
+import math
 
-bool FindUnassignedLocation(int **grid, int &row, int &col, int N){
-	for(row = 0; row<N; row++)
-		for(col = 0; col<N; col++)
-			if(grid[row][col] == UNASSIGNED)
-				return true;
-	return false;
-}
+def print_grid(arr): 
+    for i in range(n): 
+        for j in range(n): 
+            print (arr[i][j],end=" ") 
+        print ('n') 
+  
+          
 
-bool UsedInRow(int **grid, int row, int num, int N){
-	for(int i=0; i<N; i++)
-		if(grid[row][i] == num)
-			return true;
-	return false;
-}
+def find_empty_location(arr,l): 
+    for row in range(n): 
+        for col in range(n): 
+            if(arr[row][col]==0): 
+                l[0]=row 
+                l[1]=col 
+                return True
+    return False
+  
 
-bool UsedInCol(int **grid, int col, int num, int N){
-	for(int i =0; i<N; i++)
-		if(grid[i][col] == num)
-			return true;
-	return false;
-}
+def used_in_row(arr,row,num): 
+    for i in range(n): 
+        if(arr[row][i] == num): 
+            return True
+    return False
+  
+ 
+def used_in_col(arr,col,num): 
+    for i in range(n): 
+        if(arr[i][col] == num): 
+            return True
+    return False
+  
 
-bool UsedInBox(int **grid, int boxStartRow, int boxStartCol, int num, int N, int SQN){
-	for(int i=0; i<SQN; i++)
-		for(int j=0; j<SQN;j++)
-			if(grid[i+boxStartRow][j+boxStartCol] == num)
-				return true;
-	return false;
-}
+def used_in_box(arr,row,col,num): 
+    for i in range(int(math.sqrt(n))): 
+        for j in range(int(math.sqrt(n))): 
+            if(arr[i+row][j+col] == num): 
+                return True
+    return False
+  
 
-bool isSafe(int **grid, int row, int col, int num, int N){
-	return !UsedInRow(grid, row, num, N) && !UsedInCol(grid,col,num, N) && !UsedInBox(grid,row-row%(int(sqrt(N))), col-col%(int(sqrt(N))),num, N, int(sqrt(N)));
-}
+def check_location_is_safe(arr,row,col,num): 
+      
+    
+    return not used_in_row(arr,row,num) and not used_in_col(arr,col,num) and not used_in_box(arr,row - row%(int(math.sqrt(n))),col - col%(int(math.sqrt(n))),num) 
+  
 
-bool solveSudoku(int **grid, int N){
-	int row, col;
-	if(!FindUnassignedLocation(grid,row, col,N))
-		return true;
-	for(int num = 1; num<=N; num++){
-		if(isSafe(grid,row,col,num,N)){
-			grid[row][col]=num;
-			if(solveSudoku(grid,N))
-				return true;
-			grid[row][col] = UNASSIGNED;
-		}
-	}
-	return false;
-}
+def solve_sudoku(arr): 
+      
+      
+    l=[0,0] 
+      
+       
+    if(not find_empty_location(arr,l)): 
+        return True
+      
+    
+    row=l[0] 
+    col=l[1] 
+      
+     
+    for num in range(1,n+1): 
+          
+         
+        if(check_location_is_safe(arr,row,col,num)): 
+              
+            
+            arr[row][col]=num 
+  
+            
+            if(solve_sudoku(arr)): 
+                return True
+  
+            
+            arr[row][col] = 0
+              
+            
+    return False 
+  
 
-int main(){
-	int **grid, N;
-	cout<<"Enter size :";
-	cin>>N;
-	grid = new int*[N];
-	for(int i =0;i<N;i++)
-		grid[i] = new int[N];
-	cout<<"Enter the Sudoku puzzle(0 for unfilled) :\n";
-	for(int i =0; i<N; i++)
-		for(int j=0;j<N;j++)
-			cin>>grid[i][j];
-	if(solveSudoku(grid,N)){
-		for(int i =0; i<N;i++){
-			for(int j=0;j<N;j++)
-				cout<<grid[i][j]<<"\t";
-			cout<<"\n";
-		}
-	}
-	return 0;
-}
+if __name__=="__main__": 
+      
+
+    n=int(input("n: "))
+    grid=[[0 for x in range(n)]for y in range(n)] 
+      
+     
+    grid=[]
+    
+    for i in range(n):
+        a=[]
+        for i in range(n):
+            a.append(int(input()))
+    
+        grid.append(a)
+      
+    
+    if(solve_sudoku(grid)): 
+        print_grid(grid) 
+    else: 
+        print ("No solution exists")
