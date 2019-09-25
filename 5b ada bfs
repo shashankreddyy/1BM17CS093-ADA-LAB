@@ -1,43 +1,41 @@
-from collections import defaultdict 
-  
-class Graph: 
-  
-    def __init__(self): 
-  
-        self.graph = defaultdict(list) 
-  
-    def addEdge(self,u,v): 
-        self.graph[u].append(v) 
-  
-    def BFS(self, s): 
-  
-        visited = [False] * (len(self.graph)) 
-  
-        queue = [] 
-  
-        queue.append(s) 
-        visited[s] = True
-  
-        while queue: 
-  
-            s = queue.pop(0) 
-            print (s, end = " ") 
-  
-            for i in self.graph[s]: 
-                if visited[i] == False: 
-                    queue.append(i) 
-                    visited[i] = True
-  
+#include <iostream>
+#include <queue> // STL queue
+using namespace std;
 
-g = Graph() 
-g.addEdge(0, 1) 
-g.addEdge(0, 2) 
-g.addEdge(1, 2) 
-g.addEdge(2, 0) 
-g.addEdge(2, 3) 
-g.addEdge(3, 3) 
-  
-print ("Following is Breadth First Traversal"
-                  " (starting from vertex 2)") 
-g.BFS(2) 
-  
+queue<int> q;
+
+void BFS(int k,int **adj,bool *visited, int n){
+	cout<<k+1<<" ";
+	visited[k] = true;
+	q.push(k);
+	while(!q.empty()){
+		int curr = q.front();
+		q.pop();
+		for(int i =0; i<n;i++){
+			if(adj[curr][i] && !visited[i]){
+				q.push(i);
+				visited[i] = true;
+				cout<<i+1<<" ";
+			}
+		}
+	}
+}
+
+int main(){
+	int **adj, k, n;
+	bool *visited;
+	cout<<"Enter the number of nodes :\n";
+	cin>>n;
+	visited = new bool[n];
+	adj = new int*[n];
+	for(int i=0; i<n;i++)
+		adj[i] = new int[n];
+	cout<<"Enter Adjacency Matrix :\n";
+	for(int i=0; i<n;i++)
+		for(int j =0; j<n;j++)
+			cin>>adj[i][j];
+	cout<<"Enter the source vertex :";
+	cin>>k;
+	BFS(k-1,adj,visited,n);
+	return 0;
+}
